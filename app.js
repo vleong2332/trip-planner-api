@@ -1,5 +1,9 @@
 'use strict';
 
+if (process.env.NODE_ENV !== 'production') {
+    require('@glimpse/glimpse').init();
+}
+
 const express = require('express');
 const jsonParser = require('body-parser');
 const mongoose = require('mongoose');
