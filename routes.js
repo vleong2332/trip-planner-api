@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/hey', function(req, res, next) {
   res.send({look: 'it works!'})
-})
+});
 
 router.post('/users', function(req, res, next) {
   if (req.body.email &&
