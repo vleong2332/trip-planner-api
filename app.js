@@ -5,16 +5,13 @@
 // }
 
 const express = require('express');
-const jsonParser = require('body-parser');
-const mongoose = require('mongoose');
-const routes = require('./routes');
+const bodyParser = require('body-parser');
+
+const router = require('./router');
 
 const app = express();
-
-// parse incoming requests
-app.use(jsonParser.json());
-app.use(jsonParser.urlencoded({ extended: false }));
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -22,15 +19,9 @@ app.use(function(req, res, next) {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, DELETE');
         return res.status(200).json({});
     };
-    res.send('OK');
     next();
 });
+app.use('/api', router);
 
-app.use('/trip-planner', routes);
-
-mongoose.connect('mongodb://localhost:27017/trip-planner');
-var db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'connection error:'));
 
 module.exports = app;
