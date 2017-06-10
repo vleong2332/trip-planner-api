@@ -16,14 +16,17 @@ const TokenSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  }
 });
 
-TokenSchema.pre('save', function(next) {
-  const token = this;
-  token.createdAt = new Date();
-  token.expireAt = new Date(token.createdAt.getTime());
-  token.expireAt.setDate(token.expireAt.getDate() + 1);
+TokenSchema.pre('validate', function(next) {
+  this.createdAt = new Date();
+  this.expireAt = new Date(this.createdAt.getTime());
+  this.expireAt.setDate(this.expireAt.getDate() + 1);
   next();
 });
 
-module.exports = mongoose.model('User', TokenSchema);;
+module.exports = mongoose.model('Token', TokenSchema);;

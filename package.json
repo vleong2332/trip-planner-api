@@ -4,6 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "./node_modules/.bin/nodemon ./bin/www",
     "test": "mocha tests.js"
   },
   "keywords": [],
@@ -13,7 +14,8 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
-    "mongoose": "^4.10.3"
+    "mongoose": "^4.10.3",
+    "nodemon": "^1.11.0"
   },
   "devDependencies": {
     "@glimpse/glimpse": "^0.20.9",
