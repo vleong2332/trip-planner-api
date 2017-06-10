@@ -5,8 +5,8 @@ const User = require('./user');
 
 const router = express.Router();
 
-router.get('/hey', function(req, res, next) {
-  res.send({look: 'it works!'})
+router.get('/', function(req, res, next) {
+  res.send('OK');
 });
 
 router.post('/users', function(req, res, next) {
