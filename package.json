@@ -2,9 +2,10 @@
   "name": "trip-planner-api",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "bin/www",
   "scripts": {
-    "test": "mocha tests.js"
+    "test": "mocha tests.js",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
@@ -13,11 +14,13 @@
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
+    "express-session": "^1.15.3",
     "mongoose": "^4.10.3"
   },
   "devDependencies": {
     "@glimpse/glimpse": "^0.20.9",
     "mocha": "^3.4.2",
-    "supertest": "^3.0.0"
+    "supertest": "^3.0.0",
+    "watch": "nodemon ./bin/www"
   }
 }
