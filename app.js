@@ -19,9 +19,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-console.log("FROM CONFIG       ", config.DBHost)
-console.log("HARD-CODED STRING ", "mongodb://localhost:27017/trip-planner")
-
 // parse incoming requests
 app.use(jsonParser.json());
 app.use(jsonParser.urlencoded({ extended: false }));
@@ -38,7 +35,6 @@ app.use(function(req, res, next) {
 
 app.use('/trip-planner', routes);
 
-// mongoose.connect("mongodb://localhost:27017/trip-planner");
 mongoose.connect(config.DBHost);
 
 var db = mongoose.connection;
