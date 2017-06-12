@@ -9,6 +9,10 @@ router.get('/', function(req, res, next) {
   res.send('OK');
 });
 
+router.post('/login', function(req, res, next) {
+  return res.send('Logged in!');
+});
+
 router.post('/users', function(req, res, next) {
   if (req.body.email &&
     req.body.username &&
@@ -23,6 +27,7 @@ router.post('/users', function(req, res, next) {
         if (error) {
           return next(error);
         } else {
+          res.status = 201;
           res.json({ body: user });
         }
       });

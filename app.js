@@ -9,6 +9,7 @@ const jsonParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const routes = require('./routes');
+const config = require('config');
 
 const app = express();
 
@@ -17,6 +18,9 @@ app.use(session({
   resave: true,
   saveUninitialized: false
 }));
+
+console.log("FROM CONFIG       ", config.DBHost)
+console.log("HARD-CODED STRING ", "mongodb://localhost:27017/trip-planner")
 
 // parse incoming requests
 app.use(jsonParser.json());
@@ -34,7 +38,8 @@ app.use(function(req, res, next) {
 
 app.use('/trip-planner', routes);
 
-mongoose.connect('mongodb://localhost:27017/trip-planner');
+// mongoose.connect("mongodb://localhost:27017/trip-planner");
+mongoose.connect(config.DBHost);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
