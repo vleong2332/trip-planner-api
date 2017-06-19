@@ -1,7 +1,8 @@
 const request = require('supertest');
 const app = require('./app');
+const User = require('./user');
 
-describe('Requests to the root path', function() {
+describe('Request to the root path', function() {
   it('Returns 200 status code', function(done) {
     request(app)
       .get('/trip-planner/')
@@ -9,20 +10,27 @@ describe('Requests to the root path', function() {
   });
 });
 
-describe('Requests to the login path', function() {
-  it('Returns 200 status code', function(done) {
-    request(app)
-      .post('/trip-planner/login')
-      .expect(200, done)
+describe('Request to the users path', function() {
+  beforeEach(done => {
+    User.remove({}, (err) => {
+       done();
+    });
   });
-});
-
-describe('Requests to the users path', function() {
-  const payload = 'email=testemail@email.com&username=testusername&password=testpassword&confirmPassword=testpassword'
+  const payload = 'email=testemail@email.com&username=testusername&password=testpassword&confirmPassword=testpassword';
   it('Returns 201 status code', function(done) {
     request(app)
       .post('/trip-planner/users')
       .send(payload)
       .expect(201, done)
+  });
+});
+
+describe('Request to the login path', function() {
+  const payload = 'username=testusername&password=testpassword';
+  it('Returns 200 status code', function(done) {
+    request(app)
+      .post('/trip-planner/login')
+      .send(payload)
+      .expect(200, done)
   });
 });

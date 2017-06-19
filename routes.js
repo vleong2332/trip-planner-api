@@ -9,10 +9,6 @@ router.get('/', function(req, res, next) {
   res.send('OK');
 });
 
-router.post('/login', function(req, res, next) {
-  return res.send('Logged in!');
-});
-
 router.post('/users', function(req, res, next) {
   if (req.body.email &&
     req.body.username &&
@@ -27,8 +23,7 @@ router.post('/users', function(req, res, next) {
         if (error) {
           return next(error);
         } else {
-          res.status = 201;
-          res.json({ body: user });
+          res.status(201).json({ body: user });
         }
       });
 
@@ -42,6 +37,25 @@ router.post('/users', function(req, res, next) {
       err.status = 400;
       return next(err);
     }
+});
+
+router.post('/login', function(req, res, next) {
+  if (req.body.username && req.body.password) {
+    User.authenticate(req.body.username, req.body.password, function(error, user) {
+      if (error || !user) {
+        const err = new Error('Wrong username or password.');
+        err.status = 401;
+        return next(err);
+      } else {
+        req.session.userId = user._id;
+        res.end();
+      }
+    });
+  } else {
+    var err = new Error('Email and password are required.')
+    err.status = 401;
+    return next(err);
+  }
 });
 
 module.exports = router;

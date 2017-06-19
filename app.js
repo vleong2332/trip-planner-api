@@ -8,16 +8,13 @@ const express = require('express');
 const jsonParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const routes = require('./routes');
 const config = require('config');
 
 const app = express();
 
-app.use(session({
-  secret: 'shhh',
-  resave: true,
-  saveUninitialized: false
-}));
+mongoose.Promise = require('bluebird');
 
 // parse incoming requests
 app.use(jsonParser.json());
@@ -39,5 +36,14 @@ mongoose.connect(config.DBHost);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
+
+app.use(session({
+  secret: 'shhh',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: db
+  });
+}));
 
 module.exports = app;
