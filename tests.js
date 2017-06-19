@@ -66,3 +66,11 @@ describe('Request to the login path', function() {
       .expect(401, done)
   });
 });
+
+describe('Request to the logout path', function() {
+  it('Returns 200 status code', function(done) {
+    request(app)
+      .get('/trip-planner/logout')
+      .expect(200, done)
+  });
+});

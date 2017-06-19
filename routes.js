@@ -58,4 +58,17 @@ router.post('/login', function(req, res, next) {
   }
 });
 
+router.get('/logout', function(req, res, next) {
+  if (req.session) {
+    console.log('Session exists')
+    req.session.destroy(function(err) {
+      if (err) {
+        next(err)
+      } else {
+        res.status(200).end();
+      }
+    })
+  }
+});
+
 module.exports = router;
