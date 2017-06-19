@@ -33,4 +33,36 @@ describe('Request to the login path', function() {
       .send(payload)
       .expect(200, done)
   });
+
+  const passwordPayload = 'password=testpassword';
+  it('Returns 401 status code without username', function(done) {
+    request(app)
+      .post('/trip-planner/login')
+      .send(passwordPayload)
+      .expect(401, done)
+  });
+
+  const usernamePayload = 'username=testusername';
+  it('Returns 401 status code without password', function(done) {
+    request(app)
+      .post('/trip-planner/login')
+      .send(usernamePayload)
+      .expect(401, done)
+  });
+
+  const wrongUsernamePayload = 'username=wrongtestusername&password=testpassword';
+  it('Returns 401 status code with wrong username', function(done) {
+    request(app)
+      .post('/trip-planner/login')
+      .send(wrongUsernamePayload)
+      .expect(401, done)
+  });
+
+  const wrongPasswordPayload = 'username=testusername&password=wrongtestpassword';
+  it('Returns 401 status code with wrong password', function(done) {
+    request(app)
+      .post('/trip-planner/login')
+      .send(wrongPasswordPayload)
+      .expect(401, done)
+  });
 });
