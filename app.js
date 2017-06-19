@@ -16,6 +16,20 @@ const app = express();
 
 mongoose.Promise = require('bluebird');
 
+mongoose.connect(config.DBHost);
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+
+app.use(session({
+  secret: 'shhh',
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: db
+  })
+}));
+
 // parse incoming requests
 app.use(jsonParser.json());
 app.use(jsonParser.urlencoded({ extended: false }));
@@ -31,19 +45,5 @@ app.use(function(req, res, next) {
 });
 
 app.use('/trip-planner', routes);
-
-mongoose.connect(config.DBHost);
-
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-
-app.use(session({
-  secret: 'shhh',
-  resave: true,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongooseConnection: db
-  });
-}));
 
 module.exports = app;
