@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('./app');
+const { app } = require('./app');
 const User = require('./user');
 
 describe('Request to the root path', function() {
@@ -64,13 +64,5 @@ describe('Request to the login path', function() {
       .post('/trip-planner/login')
       .send(wrongPasswordPayload)
       .expect(401, done)
-  });
-});
-
-describe('Request to the logout path', function() {
-  it('Returns 200 status code', function(done) {
-    request(app)
-      .get('/trip-planner/logout')
-      .expect(200, done)
   });
 });

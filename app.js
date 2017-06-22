@@ -11,6 +11,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const routes = require('./routes');
 const config = require('config');
+const passport = require('passport');
+const User = require('./user');
 
 const app = express();
 
@@ -21,16 +23,8 @@ mongoose.connect(config.DBHost);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
-app.use(session({
-  secret: 'shhh',
-  resave: true,
-  saveUninitialized: false,
-  store: new MongoStore({
-    mongooseConnection: db
-  })
-}));
+app.use(passport.initialize());
 
-// parse incoming requests
 app.use(jsonParser.json());
 app.use(jsonParser.urlencoded({ extended: false }));
 
@@ -46,4 +40,6 @@ app.use(function(req, res, next) {
 
 app.use('/trip-planner', routes);
 
-module.exports = app;
+module.exports = {
+  app
+};
