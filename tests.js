@@ -3,7 +3,7 @@ const { app } = require('./app');
 const User = require('./user');
 
 describe('Request to the root path', function() {
-  it('Returns 200 status code', function(done) {
+  it('returns 200 status code', function(done) {
     request(app)
       .get('/trip-planner/')
       .expect(200, done)
@@ -11,13 +11,23 @@ describe('Request to the root path', function() {
 });
 
 describe('Request to the users path', function() {
+  const payload = 'email=testemail@email.com&username=testusername&password=testpassword&confirmPassword=testpassword';
+  it('returns 409 status code for duplicate user', function(done) {
+    request(app)
+      .post('/trip-planner/users')
+      .send(payload)
+      .expect(409, done)
+  });
+});
+
+describe('Request to the users path', function() {
+  const payload = 'email=testemail@email.com&username=testusername&password=testpassword&confirmPassword=testpassword';
   beforeEach(done => {
     User.remove({}, (err) => {
        done();
     });
   });
-  const payload = 'email=testemail@email.com&username=testusername&password=testpassword&confirmPassword=testpassword';
-  it('Returns 201 status code', function(done) {
+  it('returns 201 status code for new user', function(done) {
     request(app)
       .post('/trip-planner/users')
       .send(payload)
@@ -27,7 +37,7 @@ describe('Request to the users path', function() {
 
 describe('Request to the login path', function() {
   const payload = 'username=testusername&password=testpassword';
-  it('Returns 200 status code', function(done) {
+  it('returns 200 status code with correct credentials', function(done) {
     request(app)
       .post('/trip-planner/login')
       .send(payload)
@@ -35,23 +45,23 @@ describe('Request to the login path', function() {
   });
 
   const passwordPayload = 'password=testpassword';
-  it('Returns 401 status code without username', function(done) {
+  it('returns 400 status code without username', function(done) {
     request(app)
       .post('/trip-planner/login')
       .send(passwordPayload)
-      .expect(401, done)
+      .expect(400, done)
   });
 
   const usernamePayload = 'username=testusername';
-  it('Returns 401 status code without password', function(done) {
+  it('returns 400 status code without password', function(done) {
     request(app)
       .post('/trip-planner/login')
       .send(usernamePayload)
-      .expect(401, done)
+      .expect(400, done)
   });
 
   const wrongUsernamePayload = 'username=wrongtestusername&password=testpassword';
-  it('Returns 401 status code with wrong username', function(done) {
+  it('returns 401 status code with wrong username', function(done) {
     request(app)
       .post('/trip-planner/login')
       .send(wrongUsernamePayload)
@@ -59,7 +69,7 @@ describe('Request to the login path', function() {
   });
 
   const wrongPasswordPayload = 'username=testusername&password=wrongtestpassword';
-  it('Returns 401 status code with wrong password', function(done) {
+  it('returns 401 status code with wrong password', function(done) {
     request(app)
       .post('/trip-planner/login')
       .send(wrongPasswordPayload)

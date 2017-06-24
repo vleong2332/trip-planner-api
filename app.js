@@ -8,7 +8,6 @@ const express = require('express');
 const jsonParser = require('body-parser');
 const mongoose = require('mongoose');
 const session = require('express-session');
-const MongoStore = require('connect-mongo')(session);
 const routes = require('./routes');
 const config = require('config');
 const passport = require('passport');

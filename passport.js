@@ -7,12 +7,11 @@ passport.use(new LocalStrategy(function(username, password, done) {
       if (err) {
         return done(err);
       }
-      if (!user || !user.validPassword(password)) {
+      if (!user || !user.validPassword(password, user.password)) {
         return done(null, false, { message: 'Incorrect username or password.' });
       }
       return done(null, user);
     });
-  }
-));
+}));
 
 module.exports = passport;
