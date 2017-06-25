@@ -3,6 +3,7 @@
 const express = require('express');
 const User = require('./user');
 const passport = require('./passport');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -26,7 +27,7 @@ router.post('/users', function(req, res, next) {
           if (error) {
             return next(error);
           } else {
-            res.status(201).json({ body: user });
+            res.status(201).json({ body: 'test' });
           }
         });
       } else {
@@ -49,9 +50,8 @@ router.post('/users', function(req, res, next) {
 });
 
 router.post('/login', authenticate, function(req, res, next) {
-  // generate token
-  // save token in db
-  res.end();
+  const token = jwt.sign({ username: req.body.username }, 'shhh')
+  res.json({ body: 'test' });
 });
 
 module.exports = router;

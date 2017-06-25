@@ -31,7 +31,9 @@ describe('Request to the users path', function() {
     request(app)
       .post('/trip-planner/users')
       .send(payload)
-      .expect(201, done)
+      .expect(201, {
+        body: 'test'
+      }, done)
   });
 });
 
@@ -41,7 +43,9 @@ describe('Request to the login path', function() {
     request(app)
       .post('/trip-planner/login')
       .send(payload)
-      .expect(200, done)
+      .expect(200, {
+        body: 'test'
+      }, done)
   });
 
   const passwordPayload = 'password=testpassword';

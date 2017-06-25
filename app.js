@@ -7,13 +7,16 @@
 const express = require('express');
 const jsonParser = require('body-parser');
 const mongoose = require('mongoose');
-const session = require('express-session');
 const routes = require('./routes');
+const User = require('./user');
+const logger = require('morgan');
+
 const config = require('config');
 const passport = require('passport');
-const User = require('./user');
+const expressJWT = require('express-jwt');
 
 const app = express();
+app.use(logger('dev'));
 
 mongoose.Promise = require('bluebird');
 
@@ -26,6 +29,8 @@ app.use(passport.initialize());
 
 app.use(jsonParser.json());
 app.use(jsonParser.urlencoded({ extended: false }));
+
+app.use(expressJWT({ secret: 'shhh' }).unless({ path: ['/trip-planner/', '/trip-planner/users', '/trip-planner/login'] }));
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
