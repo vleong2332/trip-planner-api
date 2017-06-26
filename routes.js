@@ -61,8 +61,7 @@ router.post('/login', function(req, res, next) {
     res.status(200).json({
       message: "ok",
       token: jwt.sign({ id: user._id }, jwtOptions.secretOrKey),
-      email: user.email,
-      id: user._id
+      email: user.email
     });
   });
 });
