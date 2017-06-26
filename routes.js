@@ -2,12 +2,12 @@
 
 const express = require('express');
 const User = require('./user');
-const passport = require('./passport');
+const { passport, jwtOptions } = require('./passport');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-const authenticate = passport.authenticate('local', { session: false });
+const authenticate = passport.authenticate('jwt', { session: false });
 
 router.get('/', function(req, res, next) {
   res.send('OK');
@@ -49,9 +49,26 @@ router.post('/users', function(req, res, next) {
   }
 });
 
-router.post('/login', authenticate, function(req, res, next) {
-  const token = jwt.sign({ username: req.body.username }, 'shhh')
-  res.json({ body: 'test' });
+router.post('/login', function(req, res, next) {
+  let { username, password } = req.body;
+  User.findOne({ username: username }, function (err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user || !user.validPassword(password, user.password)) {
+      return next(null, false, { message: 'Incorrect username or password.' });
+    }
+    res.status(200).json({
+      message: "ok",
+      token: jwt.sign({ id: user._id }, jwtOptions.secretOrKey),
+      email: user.email,
+      id: user._id
+    });
+  });
+});
+
+router.get('/trips', authenticate, function(req, res, next) {
+  res.status(200).json({ message: 'you\'ve made it' });
 });
 
 module.exports = router;

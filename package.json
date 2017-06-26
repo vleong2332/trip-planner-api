@@ -5,7 +5,8 @@
   "main": "bin/www",
   "scripts": {
     "test": "export NODE_ENV=test && mocha tests.js",
-    "start": "export NODE_ENV=dev && node bin/www"
+    "start": "export NODE_ENV=dev && node bin/www",
+    "watch": "export NODE_ENV=dev && nodemon bin/www"
   },
   "keywords": [],
   "author": "",
@@ -23,12 +24,12 @@
     "mongoose": "^4.10.3",
     "morgan": "^1.8.2",
     "passport": "^0.3.2",
+    "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "@glimpse/glimpse": "^0.20.9",
     "mocha": "^3.4.2",
-    "supertest": "^3.0.0",
-    "watch": "nodemon ./bin/www"
+    "supertest": "^3.0.0"
   }
 }

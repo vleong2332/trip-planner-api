@@ -12,6 +12,7 @@ const User = require('./user');
 const logger = require('morgan');
 
 const config = require('config');
+const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const expressJWT = require('express-jwt');
 
@@ -30,7 +31,11 @@ app.use(passport.initialize());
 app.use(jsonParser.json());
 app.use(jsonParser.urlencoded({ extended: false }));
 
-app.use(expressJWT({ secret: 'shhh' }).unless({ path: ['/trip-planner/', '/trip-planner/users', '/trip-planner/login'] }));
+// app.use(expressJWT({ secret: 'shhh' }).unless({ path: [
+//   '/trip-planner/',
+//   '/trip-planner/users',
+//   '/trip-planner/login'
+// ]}));
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');

@@ -1,17 +1,30 @@
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
+const passportJWT = require('passport-jwt');
+const ExtractJwt = passportJWT.ExtractJwt;
+const JwtStrategy = passportJWT.Strategy;
+
 const User = require('./user');
 
-passport.use(new LocalStrategy(function(username, password, done) {
-    User.findOne({ username: username }, function (err, user) {
-      if (err) {
-        return done(err);
-      }
-      if (!user || !user.validPassword(password, user.password)) {
-        return done(null, false, { message: 'Incorrect username or password.' });
-      }
-      return done(null, user);
-    });
-}));
+const jwtOptions = {
+  jwtFromRequest: ExtractJwt.fromAuthHeader(),
+  secretOrKey: 'shhh'
+};
 
-module.exports = passport;
+const strategy = new JwtStrategy(jwtOptions, function(jwtPayload, next) {
+  User.findOne({ _id: jwtPayload.id }, function (err, user) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return next(null, false, { message: 'Incorrect username or password.' });
+    }
+    return next(null, user);
+  });
+});
+
+passport.use(strategy);
+
+module.exports = {
+  passport,
+  jwtOptions
+};
